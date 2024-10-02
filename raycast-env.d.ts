@@ -11,7 +11,9 @@ type ExtensionPreferences = {
   /** API Endpoint - the bearmark API endpoint */
   "API_ENDPOINT": string,
   /** API Key - the bearmark API key */
-  "API_KEY"?: string
+  "API_KEY"?: string,
+  /** Broswer - The default browser name */
+  "BROWSER": "Safari" | "Google Chrome"
 }
 
 /** Preferences accessible in all the extension's commands */

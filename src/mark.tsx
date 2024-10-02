@@ -5,12 +5,44 @@ import {
   useForm,
   FormValidation,
 } from "@raycast/utils";
-import { createBookmark } from "./apis";
+import { createBookmark, getBrowser } from "./apis";
 
 interface CreateBookmarkFormValues {
   title: string;
   url: string;
   tags: string;
+}
+
+async function GetCurrentTab() {
+  let title = "";
+  let url = "";
+  const browser = getBrowser();
+  switch (browser) {
+    case "Safari":
+      url = await runAppleScript(
+        `tell application "Safari" to return URL of current tab of front window`,
+        []
+      );
+      title = await runAppleScript(
+
+        `tell application "Safari" to return name of current tab of front window`,
+        []
+      );
+      break;
+    case "Google Chrome":
+      url = await runAppleScript(
+        `tell application "Google Chrome" to return URL of active tab of front window`,
+        []
+      );
+      title = await runAppleScript(
+        `tell application "Google Chrome" to return title of active tab of front window`,
+        []
+      );
+      break;
+    default:
+      throw new Error(`Unsupported browser: ${browser}`);
+  }
+  return { url, title };
 }
 
 export default function () {
@@ -27,14 +59,7 @@ export default function () {
     });
 
   const { isLoading } = usePromise(async () => {
-    const url = await runAppleScript(
-      `tell application "Safari" to return URL of current tab of front window`,
-      []
-    );
-    const title = await runAppleScript(
-      `tell application "Safari" to return name of current tab of front window`,
-      []
-    );
+    const { url, title } = await GetCurrentTab();
     setValue("url", url);
     setValue("title", title);
   });

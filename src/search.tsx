@@ -7,10 +7,15 @@ import {
   Form,
   Icon,
 } from "@raycast/api";
-import { FormValidation, useFetch, useForm } from "@raycast/utils";
+import {
+  FormValidation,
+  useFetch,
+  useForm,
+  runAppleScript,
+} from "@raycast/utils";
 import { useState } from "react";
 
-import { updateBookmark, getHeaders, getAPIEndpoint } from "./apis";
+import { updateBookmark, getHeaders, getAPIEndpoint, getBrowser } from "./apis";
 import type { Bookmark } from "./apis";
 
 type SearchResult = Array<Bookmark>;
@@ -49,7 +54,7 @@ export default function () {
       headers: getHeaders(),
     }
   );
-
+  const browser = getBrowser();
   return (
     <List
       isLoading={isLoading}
@@ -64,7 +69,14 @@ export default function () {
           keywords={bookmark.tags}
           actions={
             <ActionPanel>
-              <Action.OpenInBrowser url={bookmark.url} />
+              <Action icon={Icon.Globe} title={`Open In ${browser}`} onAction={
+                async () => {
+                  await runAppleScript(
+                    `tell application "${browser}" to open location "${bookmark.url}"`,
+                    []
+                  );
+                }
+              } />
               <Action.CopyToClipboard title="Copy URL" content={bookmark.url} />
               <Action
                 icon={Icon.Pencil}
