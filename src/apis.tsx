@@ -12,6 +12,11 @@ export type Bookmark = {
   updated_at: string;
 };
 
+export function getBrowser(): string {
+  let preferences = getPreferenceValues<Preferences>();
+  return preferences.BROWSER;
+}
+
 export function getAPIEndpoint(): string {
   let preferences = getPreferenceValues<Preferences>();
   return preferences.API_ENDPOINT;

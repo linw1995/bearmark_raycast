@@ -35,6 +35,24 @@
       "description": "the bearmark API key",
       "type": "textfield",
       "required": false
+    },
+    {
+      "title": "Broswer",
+      "name": "BROWSER",
+      "description": "The default browser name",
+      "type": "dropdown",
+      "default": "Safari",
+      "required": true,
+      "data": [
+        {
+          "title": "Safari",
+          "value": "Safari"
+        },
+        {
+          "title": "Google Chrome",
+          "value": "Google Chrome"
+        }
+      ]
     }
   ],
   "dependencies": {
